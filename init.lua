@@ -2,28 +2,30 @@ handholds = {}
 
 handholds.nodes = {}
 
+local S = core.get_translator("handholds")
+
 -- function to safely remove climbable air
 local function remove_air(pos, oldnode)
-	local dir = minetest.facedir_to_dir(oldnode.param2)
+	local dir = core.facedir_to_dir(oldnode.param2)
 	local airpos = vector.subtract(pos, dir)
 
-	local north_node = minetest.get_node({x = airpos.x, y = airpos.y, z = airpos.z+1})
-	local south_node = minetest.get_node({x = airpos.x, y = airpos.y, z = airpos.z-1})
-	local east_node = minetest.get_node({x = airpos.x+1, y = airpos.y, z = airpos.z})
-	local west_node = minetest.get_node({x = airpos.x-1, y = airpos.y, z = airpos.z})
+	local north_node = core.get_node({x = airpos.x, y = airpos.y, z = airpos.z+1})
+	local south_node = core.get_node({x = airpos.x, y = airpos.y, z = airpos.z-1})
+	local east_node = core.get_node({x = airpos.x+1, y = airpos.y, z = airpos.z})
+	local west_node = core.get_node({x = airpos.x-1, y = airpos.y, z = airpos.z})
 
 	local keep_air =
-		(minetest.get_item_group(north_node.name, "handholds") == 1 and
+		(core.get_item_group(north_node.name, "handholds") == 1 and
 		north_node.param2 == 0) or
-		(minetest.get_item_group(south_node.name, "handholds") == 1 and
+		(core.get_item_group(south_node.name, "handholds") == 1 and
 		south_node.param2 == 2) or
-		(minetest.get_item_group(east_node.name, "handholds") == 1 and
+		(core.get_item_group(east_node.name, "handholds") == 1 and
 		east_node.param2 == 1) or
-		(minetest.get_item_group(west_node.name, "handholds") == 1 and
+		(core.get_item_group(west_node.name, "handholds") == 1 and
 		west_node.param2 == 3)
 
 	if not keep_air then
-		minetest.set_node(airpos, {name = "air"})
+		core.set_node(airpos, {name = "air"})
 	end
 end
 
@@ -33,44 +35,44 @@ local function remove_handholds(pos)
 	local south_pos = {x = pos.x, y = pos.y, z = pos.z-1}
 	local east_pos = {x = pos.x+1, y = pos.y, z = pos.z}
 	local west_pos = {x = pos.x-1, y = pos.y, z = pos.z}
-	local north_node = minetest.get_node(north_pos)
-	local south_node = minetest.get_node(south_pos)
-	local east_node = minetest.get_node(east_pos)
-	local west_node = minetest.get_node(west_pos)
+	local north_node = core.get_node(north_pos)
+	local south_node = core.get_node(south_pos)
+	local east_node = core.get_node(east_pos)
+	local west_node = core.get_node(west_pos)
 
 	local node_pos
 
-	if minetest.get_item_group(north_node.name, "handholds") == 1 and
+	if core.get_item_group(north_node.name, "handholds") == 1 and
 			north_node.param2 == 0 then
 		node_pos = north_pos
-	elseif minetest.get_item_group(south_node.name, "handholds") == 1 and
+	elseif core.get_item_group(south_node.name, "handholds") == 1 and
 			south_node.param2 == 2 then
 		node_pos = south_pos
-	elseif minetest.get_item_group(east_node.name, "handholds") == 1 and
+	elseif core.get_item_group(east_node.name, "handholds") == 1 and
 			east_node.param2 == 1 then
 		node_pos = east_pos
-	elseif minetest.get_item_group(west_node.name, "handholds") == 1 and
+	elseif core.get_item_group(west_node.name, "handholds") == 1 and
 			west_node.param2 == 3 then
 		node_pos = west_pos
 	end
 
 	if node_pos then
-		local handholds_node = string.split(minetest.get_node(node_pos).name, ":")
+		local handholds_node = string.split(core.get_node(node_pos).name, ":")
 		if handholds_node[1] == "handholds" then
-			minetest.set_node(node_pos, {name = "default:"..handholds_node[2]})
+			core.set_node(node_pos, {name = "default:"..handholds_node[2]})
 		else
-			handholds_node = string.split(minetest.get_node(node_pos).name, "_")
-			minetest.set_node(node_pos, {name = handholds_node[1]})
+			handholds_node = string.split(core.get_node(node_pos).name, "_")
+			core.set_node(node_pos, {name = handholds_node[1]})
 		end
 	end
 end
 
 -- handholds registration function
 function handholds.register_handholds(name, def)
-	def.original_mod = def.original_mod or minetest.get_current_modname()
+	def.original_mod = def.original_mod or core.get_current_modname()
 	def.original_name = name
 
-	def.mod = minetest.get_current_modname()
+	def.mod = core.get_current_modname()
 	if def.mod ~= "handholds" then
 		name = name .. "_handholds"
 	end
@@ -79,8 +81,8 @@ function handholds.register_handholds(name, def)
 
 	def.tiles = def.tiles or def.mod .. "_" .. def.original_name .. ".png"
 
-	minetest.register_node(":".. def.mod .. ":" .. name, {
-		description = def.description or "Handholds",
+	core.register_node(":".. def.mod .. ":" .. name, {
+		description = def.description or S("Handholds"),
 		tiles = {
 			def.tiles, def.tiles, def.tiles, def.tiles, def.tiles, 
 			def.tiles .. "^handholds_holds.png"
@@ -103,51 +105,51 @@ end
 -- basic handholds nodes
 handholds.register_handholds("stone", {
 	original_mod = "default",
-	description = "Stone Handholds",
+	description = S("Stone Handholds"),
 	tiles = "default_stone.png",
 	drop = 'default:cobble',
 })
 
 handholds.register_handholds("desert_stone", {
 	original_mod = "default",
-	description = "Desert Stone Handholds",
+	description = S("Desert Stone Handholds"),
 	tiles = "default_desert_stone.png",
 	drop = 'default:desert_cobble',
 })
 
 handholds.register_handholds("sandstone", {
 	original_mod = "default",
-	description = "Sandstone Handholds",
+	description = S("Sandstone Handholds"),
 	tiles = "default_sandstone.png",
 	drop = 'default:sandstone',
 })
 
 handholds.register_handholds("silver_sandstone", {
 	original_mod = "default",
-	description = "Silver Sandstone Handholds",
+	description = S("Silver Sandstone Handholds"),
 	tiles = "default_silver_sandstone.png",
 	drop = 'default:silver_sandstone',
 })
 
 handholds.register_handholds("desert_sandstone", {
 	original_mod = "default",
-	description = "Desert Sandstone Handholds",
+	description = S("Desert Sandstone Handholds"),
 	tiles = "default_desert_sandstone.png",
 	drop = 'default:desert_sandstone',
 })
 
 handholds.register_handholds("ice", {
 	original_mod = "default",
-	description = "Ice Handholds",
+	description = S("Ice Handholds"),
 	tiles = "default_ice.png",
 	drop = 'default:ice',
 	sounds = default.node_sound_glass_defaults(),
 })
 
 
--- climbable air!
-minetest.register_node("handholds:climbable_air", {
-	description = "Air!",
+-- climbable air
+core.register_node("handholds:climbable_air", {
+	description = S("Air"),
 	drawtype = "airlike",
 	paramtype = "light",
 	sunlight_propagates = true,
@@ -164,70 +166,70 @@ minetest.register_node("handholds:climbable_air", {
 
 
 -- handholds tool
-minetest.register_tool("handholds:climbing_pick", {
-	description = "Climbing Pick",
+core.register_tool("handholds:climbing_pick", {
+	description = S("Climbing Pick"),
 	inventory_image = "handholds_tool.png",
 	sound = {breaks = "default_tool_breaks"},
 	on_use = function(itemstack, player, pointed_thing)
 		if not pointed_thing or 
 				pointed_thing.type ~= "node" or 
-				minetest.is_protected(pointed_thing.under, player:get_player_name()) or
-				minetest.is_protected(pointed_thing.above, player:get_player_name()) or
+				core.is_protected(pointed_thing.under, player:get_player_name()) or
+				core.is_protected(pointed_thing.above, player:get_player_name()) or
 				pointed_thing.under.y + 1 == pointed_thing.above.y or
 				pointed_thing.under.y - 1 == pointed_thing.above.y then
 			return
 		end
 
 		local node_def = 
-			minetest.registered_nodes[minetest.get_node(pointed_thing.above).name]
+			core.registered_nodes[core.get_node(pointed_thing.above).name]
 		if not node_def or not node_def.buildable_to then
 			return
 		end
 
-		local node_name = minetest.get_node(pointed_thing.under).name
+		local node_name = core.get_node(pointed_thing.under).name
 
 		if handholds.nodes[node_name] then
-			local rotation = minetest.dir_to_facedir(
+			local rotation = core.dir_to_facedir(
 				vector.subtract(pointed_thing.under, pointed_thing.above))
 
 			if node_name == "default:stone" then
-				minetest.set_node(pointed_thing.under,
+				core.set_node(pointed_thing.under,
 					{name = "handholds:stone", param2 = rotation})
 			elseif node_name == "default:desert_stone" then
-				minetest.set_node(pointed_thing.under,
+				core.set_node(pointed_thing.under,
 					{name = "handholds:desert_stone", param2 = rotation})
 			elseif node_name == "default:sandstone" then
-				minetest.set_node(pointed_thing.under,
+				core.set_node(pointed_thing.under,
 					{name = "handholds:sandstone", param2 = rotation})
 			elseif node_name == "default:silver_sandstone" then
-				minetest.set_node(pointed_thing.under,
+				core.set_node(pointed_thing.under,
 					{name = "handholds:silver_sandstone", param2 = rotation})
 			elseif node_name == "default:desert_sandstone" then
-				minetest.set_node(pointed_thing.under,
+				core.set_node(pointed_thing.under,
 					{name = "handholds:desert_sandstone", param2 = rotation})
 			elseif node_name == "default:ice" then
-				minetest.set_node(pointed_thing.under,
+				core.set_node(pointed_thing.under,
 					{name = "handholds:ice", param2 = rotation})
 			else
 				node_name = node_name .. "_handholds"
-				minetest.set_node(pointed_thing.under,
+				core.set_node(pointed_thing.under,
 					{name = node_name, param2 = rotation})
 			end
 		else
 			return
 		end
 
-		minetest.set_node(pointed_thing.above, {name = "handholds:climbable_air"})
-		minetest.sound_play(
+		core.set_node(pointed_thing.above, {name = "handholds:climbable_air"})
+		core.sound_play(
 			"default_dig_cracky",
 			{pos = pointed_thing.above, gain = 0.5, max_hear_distance = 8}
 		)
 
-		if not minetest.settings:get_bool("creative_mode") then
+		if not core.settings:get_bool("creative_mode") then
 			local wdef = itemstack:get_definition()
 			itemstack:add_wear(256)
 			if itemstack:get_count() == 0 and wdef.sound and wdef.sound.breaks then
-				minetest.sound_play(wdef.sound.breaks,
+				core.sound_play(wdef.sound.breaks,
 					{pos = pointed_thing.above, gain = 0.5})
 			end
 			return itemstack
@@ -235,7 +237,7 @@ minetest.register_tool("handholds:climbing_pick", {
 	end
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "handholds:climbing_pick",
 	recipe = {
 		{'default:diamond', 'default:diamond', 'default:diamond'},

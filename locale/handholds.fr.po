@@ -1,0 +1,54 @@
+# French translations for handholds mod.
+# Copyright (C) 2017 Shara RedCat
+# This file is distributed under MIT.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-31 12:44-0500\n"
+"PO-Revision-Date: 2026-05-31 12:44-0500\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: init.lua:85
+msgid "Handholds"
+msgstr "Poignées d'Escalade"
+
+#: init.lua:108
+msgid "Stone Handholds"
+msgstr "Poignées en Pierre"
+
+#: init.lua:115
+msgid "Desert Stone Handholds"
+msgstr "Poignées en Pierre du Désert"
+
+#: init.lua:122
+msgid "Sandstone Handholds"
+msgstr "Poignées en Grès"
+
+#: init.lua:129
+msgid "Silver Sandstone Handholds"
+msgstr "Poignées en Grès Argenté"
+
+#: init.lua:136
+msgid "Desert Sandstone Handholds"
+msgstr "Poignées en Grès du Désert"
+
+#: init.lua:143
+msgid "Ice Handholds"
+msgstr "Poignées de Glace"
+
+#: init.lua:152
+msgid "Air"
+msgstr "Air"
+
+#: init.lua:170
+msgid "Climbing Pick"
+msgstr "Piolet d'Escalade"
