@@ -84,7 +84,7 @@ function handholds.register_handholds(name, def)
 	core.register_node(":".. def.mod .. ":" .. name, {
 		description = def.description or S("Handholds"),
 		tiles = {
-			def.tiles, def.tiles, def.tiles, def.tiles, def.tiles, 
+			def.tiles, def.tiles, def.tiles, def.tiles, def.tiles,
 			def.tiles .. "^handholds_holds.png"
 		},
 		paramtype2 = "facedir",
@@ -164,15 +164,14 @@ core.register_node("handholds:climbable_air", {
 	end,
 })
 
-
 -- handholds tool
 core.register_tool("handholds:climbing_pick", {
 	description = S("Climbing Pick"),
 	inventory_image = "handholds_tool.png",
 	sound = {breaks = "default_tool_breaks"},
 	on_use = function(itemstack, player, pointed_thing)
-		if not pointed_thing or 
-				pointed_thing.type ~= "node" or 
+		if not pointed_thing or
+				pointed_thing.type ~= "node" or
 				core.is_protected(pointed_thing.under, player:get_player_name()) or
 				core.is_protected(pointed_thing.above, player:get_player_name()) or
 				pointed_thing.under.y + 1 == pointed_thing.above.y or
@@ -180,7 +179,7 @@ core.register_tool("handholds:climbing_pick", {
 			return
 		end
 
-		local node_def = 
+		local node_def =
 			core.registered_nodes[core.get_node(pointed_thing.above).name]
 		if not node_def or not node_def.buildable_to then
 			return
